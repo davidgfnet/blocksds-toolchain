@@ -1,6 +1,6 @@
 %global buildroot_ver  1.3.1
 
-Name:           blockds-sdk
+Name:           blocksds-sdk
 Epoch:          1
 Version:        1.3.1
 Release:        1%{?dist}
