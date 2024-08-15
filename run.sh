@@ -46,8 +46,8 @@ downfile() {
 checkgit() {
   # Checkout git repo at specific commit
   if [ ! -f "download/${1}.tar.xz" ]; then
-    git clone --recurse-submodules "$2" "download/${1}"
-    (cd "download/${1}" && git checkout "$3")
+    git clone "$2" "download/${1}"
+    (cd "download/${1}" && git checkout "$3" && git submodule update --init --recursive)
     (cd "download/" && tar cfJ "${1}.tar.xz" "${1}" && rm -rf "${1}")
   fi
 }
