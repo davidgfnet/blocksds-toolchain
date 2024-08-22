@@ -58,6 +58,12 @@ downfile "gcc-${GCC_VER}.tar.xz" "$GCC_URL" "$GCC_SUM"
 downfile "picolibc-${PICOLIBC_VER}.tar.xz" "$PICOLIBC_URL" "$PICOLIBC_SUM"
 checkgit "blocksds-${BLOCKSDS_VER}" "$BLOCKSDS_URL" "$BLOCKSDS_VER"
 
+if [ "$#" -gt 0 ]; then
+  if [ "$1" == "download" ]; then
+    exit 0   # Only download!
+  fi
+fi
+
 # Extract files in the build directory
 (cd build && tar xf "../download/binutils-${BINUTILS_VER}.tar.xz")
 (cd build && tar xf "../download/gcc-${GCC_VER}.tar.xz")
@@ -66,6 +72,13 @@ checkgit "blocksds-${BLOCKSDS_VER}" "$BLOCKSDS_URL" "$BLOCKSDS_VER"
 
 # Apply any necessary patches
 (cd build/gcc-${GCC_VER} && patch -p1 < ../../patches/gcc14-poison-system-directories.patch)
+
+# Clear OS flags
+unset CXXFLAGS
+unset CFLAGS
+unset LDFLAGS
+# Ubuntu likes to override this :D TODO: Fix upsteam
+unset V
 
 # Configure and build binutils for ARM
 (cd build/binutils-${BINUTILS_VER} && mkdir build)
