@@ -9,7 +9,7 @@ set -e
 GCC_VER="14.1.0"
 BINUTILS_VER="2.42"
 PICOLIBC_VER="1.8.6"
-BLOCKSDS_VER="ceab784229051cb5e1473a346645443c1987f5cd"  # Ver 1.3.1
+BLOCKSDS_VER="614a59c617c63f3aa7b7b8f77042af7fe05031c5"  # Ver 1.5.0
 
 BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
 GCC_URL="http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"

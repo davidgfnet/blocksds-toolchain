@@ -2,7 +2,7 @@ Source: blocksds-sdk
 Maintainer: David Guillen Fandos <david@davidgf.net>
 Section: misc
 Priority: optional
-Standards-Version: 1.3.1
+Standards-Version: 1.5.0
 Build-Depends: debhelper-compat (= 13), libgmp-dev, libmpfr-dev, libmpc-dev, bison, xz-utils, make, tar, ninja-build, libisl-dev, meson, texinfo
 
 Package: blocksds-sdk
