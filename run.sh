@@ -8,8 +8,8 @@ set -e
 
 GCC_VER="14.1.0"
 BINUTILS_VER="2.42"
-PICOLIBC_VER="1.8.6"
-BLOCKSDS_VER="9b51bd2fe9cd7ef4fc92200a4ecef68624630a2c"  # Ver 1.7.0
+PICOLIBC_VER="1.8.9"
+BLOCKSDS_VER="09942b8d5053b9ad2b998280588f2954b146502b"  # Ver 1.9.1
 
 BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
 GCC_URL="http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"
@@ -18,7 +18,7 @@ BLOCKSDS_URL="https://github.com/blocksds/sdk.git"
 
 BINUTILS_SUM="f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800"
 GCC_SUM="e283c654987afe3de9d8080bc0bd79534b5ca0d681a73a11ff2b5d3767426840"
-PICOLIBC_SUM="9549aac02bef6b2761af124392a7ffc6bbc8dfc8541b698ac032567b516c9b34"
+PICOLIBC_SUM="4b2406ccfe7702e942840bb6bd6019fbb8c3414eee8954a2ae041288ebd21754"
 
 
 # Clean up and start from anew

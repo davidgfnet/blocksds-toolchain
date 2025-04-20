@@ -6,3 +6,6 @@
 override_dh_strip:
 	dh_strip -X.a -X.elf
 
+# dh_dwz fails on some files (and it's not very useful anyway)
+override_dh_dwz:
+	:
