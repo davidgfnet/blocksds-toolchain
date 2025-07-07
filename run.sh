@@ -1,4 +1,4 @@
-#!/binb/bash
+#!/bin/bash
 
 set -e
 
@@ -7,18 +7,18 @@ set -e
 # It downloads any necessary sources and validates them.
 
 GCC_VER="14.1.0"
-BINUTILS_VER="2.42"
-PICOLIBC_VER="1.8.9"
-BLOCKSDS_VER="09942b8d5053b9ad2b998280588f2954b146502b"  # Ver 1.9.1
+BINUTILS_VER="2.44"
+PICOLIBC_VER="1.8.10"
+BLOCKSDS_VER="43b693bc622c8fea4a3b991ed9027ba006fc00e5"  # Ver 1.11.1
 
 BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
 GCC_URL="http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"
 PICOLIBC_URL="https://github.com/picolibc/picolibc/releases/download/${PICOLIBC_VER}/picolibc-${PICOLIBC_VER}.tar.xz"
 BLOCKSDS_URL="https://github.com/blocksds/sdk.git"
 
-BINUTILS_SUM="f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800"
+BINUTILS_SUM="ce2017e059d63e67ddb9240e9d4ec49c2893605035cd60e92ad53177f4377237"
 GCC_SUM="e283c654987afe3de9d8080bc0bd79534b5ca0d681a73a11ff2b5d3767426840"
-PICOLIBC_SUM="4b2406ccfe7702e942840bb6bd6019fbb8c3414eee8954a2ae041288ebd21754"
+PICOLIBC_SUM="0ce5ee3bde81256633644d7b3bd25f5a6ccfd8b0590fd4ee543df2c3ede6e27e"
 
 
 # Clean up and start from anew
