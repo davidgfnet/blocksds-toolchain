@@ -1,0 +1,39 @@
+name: BlocksDS release
+run-name: Build a full BlocksDS release
+
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - '*'
+
+jobs:
+  # Fetches all the sources and generates a source tarball
+  build-source-tarball:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install wget tar git
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get short SHA
+        id: slug
+        run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+      - name: Fetch sources
+        run: |
+          ./run.sh download
+      - name: Upload source tarball
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: blocksds-source-${{ steps.slug.outputs.sha8 }}
+          path: |
+            download/*
+            patches/*
+            Makefile
+            run.sh
+            debian/*
+            fedora-specs/*
+
+
