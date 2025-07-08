@@ -11,9 +11,17 @@ BINUTILS_VER="2.44"
 PICOLIBC_VER="1.8.10"
 BLOCKSDS_VER="43b693bc622c8fea4a3b991ed9027ba006fc00e5"  # Ver 1.11.1
 
-BINUTILS_URL="http://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
-GCC_URL="http://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"
-PICOLIBC_URL="https://github.com/picolibc/picolibc/releases/download/${PICOLIBC_VER}/picolibc-${PICOLIBC_VER}.tar.xz"
+BINUTILS_URL=(
+  "https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
+  "https://sourceware.org/pub/binutils/releases/binutils-${BINUTILS_VER}.tar.xz"
+)
+GCC_URL=(
+  "https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"
+  "https://sourceware.org/pub/gcc/releases/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.xz"
+)
+PICOLIBC_URL=(
+  "https://github.com/picolibc/picolibc/releases/download/${PICOLIBC_VER}/picolibc-${PICOLIBC_VER}.tar.xz"
+)
 BLOCKSDS_URL="https://github.com/blocksds/sdk.git"
 
 BINUTILS_SUM="ce2017e059d63e67ddb9240e9d4ec49c2893605035cd60e92ad53177f4377237"
@@ -33,11 +41,17 @@ TOOLCHAIN_PATH=`realpath toolchain`
 export PATH="${TOOLCHAIN_PATH}/bin:${PATH}"
 
 downfile() {
-  # Download source files if they do not exist
-  if [ ! -f "download/$1" ]; then
-    wget -O "download/$1" "$2"
+  file="$(basename "$2")"
+  echo "$file"
+  if [ ! -f "download/$file" ]; then
+    for url in "${@:2}"; do
+      echo "Trying $url"
+      if wget -O "download/$file" "$url"; then
+        break
+      fi
+    done
   fi
-  if ! (printf '%s %s\n' "$3" "download/$1" | sha256sum --check); then
+  if ! (printf '%s  %s\n' "$1" "download/$file" | sha256sum --check); then
     echo "Checksum error"
     exit 1
   fi
@@ -53,9 +67,9 @@ checkgit() {
 }
 
 # Download and check files if needed
-downfile "binutils-${BINUTILS_VER}.tar.xz" "$BINUTILS_URL" "$BINUTILS_SUM"
-downfile "gcc-${GCC_VER}.tar.xz" "$GCC_URL" "$GCC_SUM"
-downfile "picolibc-${PICOLIBC_VER}.tar.xz" "$PICOLIBC_URL" "$PICOLIBC_SUM"
+downfile "$BINUTILS_SUM" "${BINUTILS_URL[@]}"
+downfile "$GCC_SUM" "${GCC_URL[@]}"
+downfile "$PICOLIBC_SUM" "${PICOLIBC_URL[@]}"
 checkgit "blocksds-${BLOCKSDS_VER}" "$BLOCKSDS_URL" "$BLOCKSDS_VER"
 
 if [ "$#" -gt 0 ]; then
