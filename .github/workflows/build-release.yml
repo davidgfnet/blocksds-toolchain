@@ -12,6 +12,8 @@ jobs:
   # Fetches all the sources and generates a source tarball
   build-source-tarball:
     runs-on: ubuntu-24.04
+    outputs:
+      sha8: ${{ steps.slug.outputs.sha8 }}
     steps:
       - name: Install dependencies
         run: sudo apt-get install wget tar git
@@ -35,5 +37,32 @@ jobs:
             run.sh
             debian/*
             fedora-specs/*
+
+  # Builds the toolchain for ubuntu and generates a binary tarball
+  build-binary-ubuntu:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-source-tarball
+    steps:
+      - name: Install dependencies
+        run: sudo apt-get install curl libgmp-dev libmpfr-dev libmpc-dev bison xz-utils make tar ninja-build libisl-dev meson texinfo bzip2 doxygen
+      - name: Get short SHA
+        id: slug
+        run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+      - name: Fetch source tarball artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: blocksds-source-${{ needs.build-source-tarball.outputs.sha8 }}
+          path: ./
+      - name: Build from source tarball
+        run: |
+          make
+          cd toolchain && tar -cf ../blocksds-ubuntu-24.04-${{ steps.slug.outputs.sha8 }}.tar .
+      - name: Upload binary release tarball
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: blocksds-ubuntu-24.04-${{ steps.slug.outputs.sha8 }}.tar
+          path: blocksds-ubuntu-24.04-${{ steps.slug.outputs.sha8 }}.tar
 
 
