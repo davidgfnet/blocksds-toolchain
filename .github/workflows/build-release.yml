@@ -65,4 +65,58 @@ jobs:
           name: blocksds-ubuntu-24.04-${{ steps.slug.outputs.sha8 }}.tar
           path: blocksds-ubuntu-24.04-${{ steps.slug.outputs.sha8 }}.tar
 
+  # Create release
+  create-release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-24.04
+    needs:
+      - build-source-tarball
+      - build-binary-ubuntu
+    steps:
+      - name: Get release version
+        id: tagversion
+        if: startsWith(github.ref, 'refs/tags/')
+        run: fullref="${{ github.ref }}"; tagversion=${fullref#"refs/tags/"}; echo "tagversion=${tagversion}" >> $GITHUB_OUTPUT
+      - name: Fetch source assets
+        uses: actions/download-artifact@v4
+        with:
+          name: blocksds-source-${{ needs.build-source-tarball.outputs.sha8 }}
+          path: ./src
+      - name: Fetch binary assets
+        uses: actions/download-artifact@v4
+        with:
+          name: blocksds-ubuntu-24.04-${{ needs.build-source-tarball.outputs.sha8 }}.tar
+          path: ./bin-ubuntu-24.04
+      - name: Package assets
+        run: |
+          tar -czf blocksds-source-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz -C ./src .
+          tar -czf blocksds-ubuntu-24.04-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz -C ./bin-ubuntu-24.04 .
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset (source)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: blocksds-source-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz
+          asset_name: blocksds-source-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz
+          asset_content_type: application/octet-stream
+      - name: Upload Release Asset (Ubuntu 24.04 binaries)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: blocksds-ubuntu-24.04-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz
+          asset_name: blocksds-ubuntu-24.04-${{ steps.tagversion.outputs.tagversion }}-${{ needs.build-source-tarball.outputs.sha8 }}.tar.gz
+          asset_content_type: application/octet-stream
 
