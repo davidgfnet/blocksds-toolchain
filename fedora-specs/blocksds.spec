@@ -22,11 +22,11 @@ URL:            https://blocksds.github.io/docs/
 Source0:	run.sh
 Source1:	download/binutils-2.44.tar.xz
 Source2:	download/blocksds-43b693bc622c8fea4a3b991ed9027ba006fc00e5.tar.xz
-Source3:	download/gcc-14.1.0.tar.xz
+Source3:	download/gcc-15.2.0.tar.xz
 Source4:	download/picolibc-1.8.10.tar.xz
 Source5:	patches/cross-thumb.txt
 Source6:	patches/picolibc.specs
-Source7:	patches/gcc14-poison-system-directories.patch
+Source7:	patches/gcc15-poison-system-directories.patch
 
 BuildRequires:  perl-ExtUtils-MakeMaker perl-Thread-Queue perl-FindBin perl-English
 BuildRequires:	autoconf mpfr mpfr-devel libmpc libmpc-devel isl isl-devel gmp gmp-devel

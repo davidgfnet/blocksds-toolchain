@@ -6,7 +6,7 @@ set -e
 # Places the toolchain in the "./toolchain/" directory.
 # It downloads any necessary sources and validates them.
 
-GCC_VER="14.1.0"
+GCC_VER="15.2.0"
 BINUTILS_VER="2.44"
 PICOLIBC_VER="1.8.10"
 BLOCKSDS_VER="43b693bc622c8fea4a3b991ed9027ba006fc00e5"  # Ver 1.11.1
@@ -25,7 +25,7 @@ PICOLIBC_URL=(
 BLOCKSDS_URL="https://github.com/blocksds/sdk.git"
 
 BINUTILS_SUM="ce2017e059d63e67ddb9240e9d4ec49c2893605035cd60e92ad53177f4377237"
-GCC_SUM="e283c654987afe3de9d8080bc0bd79534b5ca0d681a73a11ff2b5d3767426840"
+GCC_SUM="438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
 PICOLIBC_SUM="0ce5ee3bde81256633644d7b3bd25f5a6ccfd8b0590fd4ee543df2c3ede6e27e"
 
 
@@ -85,7 +85,7 @@ fi
 (cd build && tar xf "../download/blocksds-${BLOCKSDS_VER}.tar.xz")
 
 # Apply any necessary patches
-(cd build/gcc-${GCC_VER} && patch -p1 < ../../patches/gcc14-poison-system-directories.patch)
+(cd build/gcc-${GCC_VER} && patch -p1 < ../../patches/gcc15-poison-system-directories.patch)
 
 # Clear OS flags
 unset CXXFLAGS
