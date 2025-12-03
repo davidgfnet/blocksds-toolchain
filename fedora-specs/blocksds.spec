@@ -1,8 +1,8 @@
-%global buildroot_ver  1.11.1
+%global buildroot_ver  1.15.7
 
 Name:           blocksds-sdk
 Epoch:          1
-Version:        1.11.1
+Version:        1.15.7
 Release:        1%{?dist}
 Summary:        BlocksDS SDK and ARM toolchain targeting the Nintendo DS
 
@@ -21,7 +21,7 @@ URL:            https://blocksds.github.io/docs/
 
 Source0:	run.sh
 Source1:	download/binutils-2.44.tar.xz
-Source2:	download/blocksds-43b693bc622c8fea4a3b991ed9027ba006fc00e5.tar.xz
+Source2:	download/blocksds-73a62ded396bcce9488d002590ceea59d0bd2de9.tar.xz
 Source3:	download/gcc-15.2.0.tar.xz
 Source4:	download/picolibc-1.8.10.tar.xz
 Source5:	patches/cross-thumb.txt
@@ -73,6 +73,9 @@ cp -r toolchain %{buildroot}/opt/blocksds-toolchain
 /opt/blocksds-toolchain/*
 
 %changelog
+* Wed Dec 03 2025 David Guillen Fandos <david@davidgf.net> - 1.15.7-1
+- Update to v1.15.7
+
 * Sun Jul 06 2025 David Guillen Fandos <david@davidgf.net> - 1.11.1-1
 - Update to v1.11.1
 

@@ -1,3 +1,9 @@
+blocksds-sdk (1.15.7-1) jammy; urgency=low
+
+  * Update to version 1.15.7.
+
+ -- David Guillen Fandos <david@davidgf.net>  Wed, 03 Dec 2025 00:20:00 +0200
+
 blocksds-sdk (1.11.1-1) jammy; urgency=low
 
   * Update to version 1.11.1.
