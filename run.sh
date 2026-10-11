@@ -6,10 +6,10 @@ set -e
 # Places the toolchain in the "./toolchain/" directory.
 # It downloads any necessary sources and validates them.
 
-GCC_VER="15.2.0"
-BINUTILS_VER="2.44"
-PICOLIBC_VER="1.8.10"
-BLOCKSDS_VER="73a62ded396bcce9488d002590ceea59d0bd2de9"  # Ver 1.15.7
+GCC_VER="16.2.0"
+BINUTILS_VER="2.45.1"
+PICOLIBC_VER="1.8.12"
+BLOCKSDS_VER="b903b4546936a0154f0decbbae137f7a2e9969a4"  # Ver 1.24.0
 
 BINUTILS_URL=(
   "https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz"
@@ -22,11 +22,11 @@ GCC_URL=(
 PICOLIBC_URL=(
   "https://github.com/picolibc/picolibc/releases/download/${PICOLIBC_VER}/picolibc-${PICOLIBC_VER}.tar.xz"
 )
-BLOCKSDS_URL="https://github.com/blocksds/sdk.git"
+BLOCKSDS_URL="https://codeberg.org/blocksds/sdk.git"
 
-BINUTILS_SUM="ce2017e059d63e67ddb9240e9d4ec49c2893605035cd60e92ad53177f4377237"
-GCC_SUM="438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e"
-PICOLIBC_SUM="0ce5ee3bde81256633644d7b3bd25f5a6ccfd8b0590fd4ee543df2c3ede6e27e"
+BINUTILS_SUM="5fe101e6fe9d18fdec95962d81ed670fdee5f37e3f48f0bef87bddf862513aa5"
+GCC_SUM="e6738e29597f733270731aa90600f37ffdc045079dfc27ec7e8192cc81085c3e"
+PICOLIBC_SUM="64e8c412e1c40fa6eb1a72d2b5cdbcbfe6ceca4cbea454edbad54557ffc747fa"
 
 
 # Clean up and start from anew
@@ -148,13 +148,17 @@ popd
 # We proceed to build picolibc with the current gcc1 phase1
 (cd build/picolibc-${PICOLIBC_VER} && mkdir build)
 
+(cd build/picolibc-${PICOLIBC_VER} && patch -p1 < ../../patches/picolibc_32bit_types.patch)
+(cd build/picolibc-${PICOLIBC_VER} && patch -p1 < ../../patches/picolibc_dirent.patch)
+(cd build/picolibc-${PICOLIBC_VER} && patch -p1 < ../../patches/picolibc_ioctl_varags.patch)
+
 pushd build/picolibc-${PICOLIBC_VER}/build
 
   meson setup \
           --cross-file=../../../patches/cross-thumb.txt \
           -Dmultilib=true \
           -Dpicocrt=false \
-          -Dpicolib=false \
+          -Dpicocrt-lib=false \
           -Dsemihost=false \
           -Dspecsdir=none \
           -Dtests=false \
@@ -164,7 +168,6 @@ pushd build/picolibc-${PICOLIBC_VER}/build
           -Dio-percent-b=true \
           -Dposix-console=true \
           -Dformat-default=double \
-          -Dnewlib-nano-malloc=false \
           -Dprefix="${TOOLCHAIN_PATH}" \
           -Dlibdir=arm-none-eabi/lib \
           -Dincludedir=arm-none-eabi/include \

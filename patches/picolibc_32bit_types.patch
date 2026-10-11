@@ -1,0 +1,39 @@
+From e7de0572a10f5415071d0fec6b0424b009820eac Mon Sep 17 00:00:00 2001
+From: Adrian Siekierka <kontakt@asie.pl>
+Date: Sat, 7 Mar 2026 15:07:28 +0100
+Subject: [PATCH] wonderful: Use 32-bit file system types by default
+
+---
+ libc/include/machine/_types.h | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/libc/include/machine/_types.h b/libc/include/machine/_types.h
+index be7e1bd21..85c973173 100644
+--- a/libc/include/machine/_types.h
++++ b/libc/include/machine/_types.h
+@@ -1,8 +1,21 @@
+-/*
+- *  Copyright (c) 2005 Ralf Corsepious  <ralf.corsepius@rtems.org>
+- */
+-
+ #ifndef _MACHINE__TYPES_H
+ #define _MACHINE__TYPES_H
++
+ #include <machine/_default_types.h>
++
++// Wonderful: The platforms targetted by this toolchain don't really need
++// support for files > 4 GiB or very large file systems.
++
++typedef __uint32_t __dev_t;
++#define __machine_dev_t_defined
++
++typedef __uint32_t __ino_t;
++#define __machine_ino_t_defined
++
++typedef __int32_t __off_t;
++#define __machine_off_t_defined
++
++typedef __uint32_t __rlim_t;
++#define __machine_rlim_t_defined
++
+ #endif

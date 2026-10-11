@@ -1,0 +1,47 @@
+From fccf2acc5cbb3f1375f14635f087c088312df58c Mon Sep 17 00:00:00 2001
+From: Adrian Siekierka <kontakt@asie.pl>
+Date: Sat, 7 Mar 2026 12:59:31 +0100
+Subject: [PATCH] wonderful: Use varargs for ioctl() definition
+
+---
+ libc/include/sys/ioctl.h | 2 +-
+ libos/linux/ioctl.c      | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/libc/include/sys/ioctl.h b/libc/include/sys/ioctl.h
+index 553444121..033ebf613 100644
+--- a/libc/include/sys/ioctl.h
++++ b/libc/include/sys/ioctl.h
+@@ -41,7 +41,7 @@
+ 
+ _BEGIN_STD_C
+ 
+-int ioctl(int fd, unsigned long op, void *param);
++int ioctl(int fd, unsigned long op, ...);
+ 
+ #define TIOCGWINSZ (('T' << 8) | 1)
+ #define TIOCSWINSZ (('T' << 8) | 2)
+diff --git a/libos/linux/ioctl.c b/libos/linux/ioctl.c
+index 358b92a2a..45a16c572 100644
+--- a/libos/linux/ioctl.c
++++ b/libos/linux/ioctl.c
+@@ -39,8 +39,9 @@
+ #include <errno.h>
+ 
+ int
+-ioctl(int fd, unsigned long op, void *arg)
++ioctl(int fd, unsigned long op, ...)
+ {
++/*
+     switch (op) {
+     case TIOCGWINSZ:
+         return tcgetwinsize(fd, arg);
+@@ -49,6 +50,8 @@ ioctl(int fd, unsigned long op, void *arg)
+     case TIOCLINUX:
+         return syscall(LINUX_SYS_ioctl, fd, LINUX_TIOCLINUX, arg);
+     default:
++*/
++    {
+         errno = EINVAL;
+         return -1;
+     }

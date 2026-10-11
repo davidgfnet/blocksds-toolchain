@@ -1,0 +1,59 @@
+From 770d868896622d726129fa99168d5d20160d0f55 Mon Sep 17 00:00:00 2001
+From: Adrian Siekierka <kontakt@asie.pl>
+Date: Sat, 21 Mar 2026 08:37:07 +0100
+Subject: [PATCH] wonderful: Use adjusted <sys/dirent.h>
+
+---
+ libc/include/sys/dirent.h | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
+
+diff --git a/libc/include/sys/dirent.h b/libc/include/sys/dirent.h
+index 83b16bb7d..804e9e769 100644
+--- a/libc/include/sys/dirent.h
++++ b/libc/include/sys/dirent.h
+@@ -46,7 +46,7 @@ typedef __ino_t ino_t; /* inode number */
+ #define _INO_T_DECLARED
+ #endif
+ 
+-typedef size_t reclen_t;
++typedef unsigned short reclen_t;
+ 
+ #ifndef _SSIZE_T_DECLARED
+ typedef __ssize_t ssize_t;
+@@ -54,28 +54,22 @@ typedef __ssize_t ssize_t;
+ #endif
+ 
+ struct dirent {
+-    ino_t     d_ino; /* Inode number */
+-    __uint8_t d_type;
+-    char      d_name[__NAME_MAX + 1]; /* Null-terminated filename */
++    ino_t         d_ino; /* Inode number */
++    off_t         d_off; /* Index within the directory. */
++    reclen_t      d_reclen;
++    unsigned char d_type;
++    char          d_name[__NAME_MAX + 1]; /* Null-terminated filename */
+ };
+ 
+ struct posix_dent {
+-    ino_t         d_ino;
++    ino_t         d_ino; /* Inode number */
++    off_t         d_off; /* Index within the directory. */
+     reclen_t      d_reclen;
+     unsigned char d_type;
+     char          d_name[];
+ };
+ 
+-typedef struct {
+-    int           fd;
+-    size_t        offset;
+-    size_t        count;
+-    struct dirent dirent;
+-    union {
+-        char       buf[512];
+-        __uint64_t align;
+-    };
+-} DIR;
++typedef struct __dirstream DIR;
+ 
+ #define DT_BLK     1
+ #define DT_CHR     2

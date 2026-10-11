@@ -1,8 +1,7 @@
-%global buildroot_ver  1.15.7
 
 Name:           blocksds-sdk
 Epoch:          1
-Version:        1.15.7
+Version:        1.24.0
 Release:        1%{?dist}
 Summary:        BlocksDS SDK and ARM toolchain targeting the Nintendo DS
 
@@ -17,16 +16,20 @@ Summary:        BlocksDS SDK and ARM toolchain targeting the Nintendo DS
 #               libjava/classpath/external/sax/org/xml/sax/ext/DeclHandler.java
 # BSL zlib/contrib/dotzlib/DotZLib/GZipStream.cs
 License:        GPLv3+ and LGPLv2+ and MIT and CC0
-URL:            https://blocksds.github.io/docs/
+URL:            https://blocksds.skylyrac.net/
 
 Source0:	run.sh
-Source1:	download/binutils-2.44.tar.xz
-Source2:	download/blocksds-73a62ded396bcce9488d002590ceea59d0bd2de9.tar.xz
-Source3:	download/gcc-15.2.0.tar.xz
-Source4:	download/picolibc-1.8.10.tar.xz
+Source1:	download/binutils-2.45.1.tar.xz
+Source2:	download/blocksds-b903b4546936a0154f0decbbae137f7a2e9969a4.tar.xz
+Source3:	download/gcc-16.2.0.tar.xz
+Source4:	download/picolibc-1.8.12.tar.xz
 Source5:	patches/cross-thumb.txt
 Source6:	patches/picolibc.specs
 Source7:	patches/gcc15-poison-system-directories.patch
+Source8:	patches/picolibc_32bit_types.patch
+Source9:	patches/picolibc_dirent.patch
+Source10:	patches/picolibc_ioctl_varags.patch
+
 
 BuildRequires:  perl-ExtUtils-MakeMaker perl-Thread-Queue perl-FindBin perl-English
 BuildRequires:	autoconf mpfr mpfr-devel libmpc libmpc-devel isl isl-devel gmp gmp-devel
@@ -53,7 +56,7 @@ ARM toolchain to be able to build homebrew applications for the platform.
 mkdir -p download/ patches/
 cp %{SOURCE0} .
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} download/
-cp %{SOURCE5} %{SOURCE6} %{SOURCE7} patches/
+cp %{SOURCE5} %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} patches/
 
 %build
 # Disable format-security since GCC14 has a couple of format warnings
@@ -73,6 +76,9 @@ cp -r toolchain %{buildroot}/opt/blocksds-toolchain
 /opt/blocksds-toolchain/*
 
 %changelog
+* Wed Oct 07 2026 David Guillen Fandos <david@davidgf.net> - 1.24.0-1
+- Update to v1.24.0 (and GCC 16)
+
 * Wed Dec 03 2025 David Guillen Fandos <david@davidgf.net> - 1.15.7-1
 - Update to v1.15.7
 
